@@ -1,0 +1,68 @@
+from queue import PriorityQueue
+
+goal_state = (1, 2, 3, 4, 5, 6, 7, 8, 0)
+
+def heuristic(state):
+    """Calculates Manhattan distance for the A* search."""
+    distance = 0
+    for i in range(9):
+        tile = state[i]
+        if tile != 0:
+         
+            r, c = i // 3, i % 3
+           
+            tr, tc = (tile - 1) // 3, (tile - 1) % 3
+            distance += abs(r - tr) + abs(c - tc)
+    return distance
+
+def successors(state):
+    """Generates all possible next moves from the current state."""
+    result = []
+    i = state.index(0)
+    row, col = i // 3, i % 3
+    
+    moves = []
+    if col > 0: moves.append(-1) 
+    if col < 2: moves.append(1)  
+    if row > 0: moves.append(-3) 
+    if row < 2: moves.append(3)  
+    
+    for move in moves:
+        s = list(state)
+        
+        s[i], s[i + move] = s[i + move], s[i]
+        result.append(tuple(s))
+    return result
+
+def solve(initial):
+    """Implementation of A* Search algorithm."""
+    
+    frontier = PriorityQueue()
+    frontier.put((heuristic(initial), 0, initial))
+    
+   
+    visited = {initial: 0}
+    
+    while not frontier.empty():
+      
+        _, cost, current = frontier.get()
+        
+        if current == goal_state:
+            return True
+        
+        for neighbor in successors(current):
+            new_cost = cost + 1
+           
+            if neighbor not in visited or new_cost < visited[neighbor]:
+                visited[neighbor] = new_cost
+                f_score = new_cost + heuristic(neighbor)
+                frontier.put((f_score, new_cost, neighbor))
+                
+    return False
+
+initial_state = (1, 2, 3, 4, 0, 5, 7, 8, 6) 
+
+if solve(initial_state):
+    print("The puzzle is solvable!")
+else:
+    print("The puzzle is unsolvable.")
