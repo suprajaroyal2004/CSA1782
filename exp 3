@@ -1,0 +1,31 @@
+def water_jug_problem(jug1_cap, jug2_cap, target):
+    
+    j1 = 0
+    j2 = 0
+    
+    print(f"Starting with Jug 1: {j1}L, Jug 2: {j2}L\n")
+     
+    while j1 != target and j2 != target:
+        
+        
+        if j1 == 0:
+            j1 = jug1_cap
+            print("Fill jug 1")
+            
+      
+        elif j1 > 0 and j2 < jug2_cap:
+            pour_amount = min(j1, jug2_cap - j2)
+            j1 -= pour_amount
+            j2 += pour_amount
+            print("Pour jug 1 into jug 2")
+            
+      
+        elif j2 == jug2_cap:
+            j2 = 0
+            print("Empty jug 2")
+            
+   
+        if j1 == target or j2 == target:
+            break
+
+water_jug_problem(4, 3, 2)
